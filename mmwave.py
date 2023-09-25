@@ -80,7 +80,7 @@ class MMWave:
         while True:
             ch = self.ser.read(1)
             if ch != b"\x55":
-                print("ignore %02X " % int(ch), end="")
+                print("ignore %02X " % int(ch[0]), end="")
                 continue
 
             break

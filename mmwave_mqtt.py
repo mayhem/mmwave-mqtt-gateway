@@ -15,7 +15,7 @@ CLIENT_ID = socket.gethostname()
 
 class MMWave_MQTT_Gateway:
 
-    TOPIC = "zigbee2mqtt/bedroom-presence-sensor"
+    TOPIC = "zigbee2mqtt/presence-bedroom"
 
     def __init__(self):
         self.mqttc = mqtt.Client(CLIENT_ID)
@@ -34,7 +34,7 @@ class MMWave_MQTT_Gateway:
         callback_obj._on_event(event)
 
     def _on_event(self, event):
-        print(f"{asctime()} %s" % event)
+#        print(f"{asctime()} %s" % event)
         if event in ("occupied-moving", "occupied-static", "unoccupied"):
             if event != self.current_state:
                 self.mqttc.publish(self.TOPIC, '{ "presence": "%s" }' % event)
