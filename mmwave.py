@@ -127,24 +127,23 @@ class MMWave:
                        return "occupied-static"
                    if data[0] == 0x01 and data[1] == 0x01 and data[2] == 0x01:
                        return "occupied-moving"
-               if addr2 == 6:         # Body data
-                   body_data = unpack("f", bytearray(tuple(data)))  # WHY?
-                   return "body-data %d" % int(body_data[0])
+#               if addr2 == 6:         # Body data
+#                   body_data = unpack("f", bytearray(tuple(data)))  # WHY?
+#                   return "body-data %d" % int(body_data[0])
 
+               if addr2 == 7:         # Approach/away
+                   if data[0] == 0x01 and data[1] == 0x01 and data[2] == 0x01:
+                       return "no approach data"
+                   if data[0] == 0x01 and data[1] == 0x01 and data[2] == 0x02:
+                       return "approach"
+                   if data[0] == 0x01 and data[1] == 0x01 and data[2] == 0x03:
+                       return "away"
+                   if data[0] == 0x01 and data[1] == 0x01 and data[2] == 0x04:
+                       return "sustained approach"
+                   if data[0] == 0x01 and data[1] == 0x01 and data[2] == 0x05:
+                       return "sustained away"
         return None
 
-
-#              if addr2 == 7:         # Approach/away
-#                  if data[0] == 0x01 and data[1] == 0x01 and data[2] == 0x01:
-#                      return "no approach data"
-#                  if data[0] == 0x01 and data[1] == 0x01 and data[2] == 0x02:
-#                      return "approach"
-#                  if data[0] == 0x01 and data[1] == 0x01 and data[2] == 0x03:
-#                      return "away"
-#                  if data[0] == 0x01 and data[1] == 0x01 and data[2] == 0x04:
-#                      return "sustained approach"
-#                  if data[0] == 0x01 and data[1] == 0x01 and data[2] == 0x05:
-#                      return "sustained away"
 #          if addr1 == 5:             # Report other information
 #              if addr2 == 1:         # Heartbeat package
 #                  if data[0] == 0x00 and data[1] == 0xFF and data[2] == 0xFF:

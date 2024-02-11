@@ -13,13 +13,19 @@ from mmwave import MMWave
 
 CLIENT_ID = socket.gethostname()
 
+SENSOR_NAME = "presence-bedroom"
+MQTT_HOST = "10.1.1.2"
+MQTT_PORT = 1883
+
+
+
 class MMWave_MQTT_Gateway:
 
-    TOPIC = "zigbee2mqtt/presence-bedroom"
+    TOPIC = "zigbee2mqtt/" + config.SENSOR_NAME
 
     def __init__(self):
         self.mqttc = mqtt.Client(CLIENT_ID)
-        self.mqttc.connect("10.1.1.2", 1883, 60)
+        self.mqttc.connect(config.MQTT_HOST, config.MQTT_PORT, 60)
         self.mqttc.loop_start()
         print("MQTT connected.")
 
@@ -34,7 +40,10 @@ class MMWave_MQTT_Gateway:
         callback_obj._on_event(event)
 
     def _on_event(self, event):
-#        print(f"{asctime()} %s" % event)
+        if event is None:
+            return
+        with open("/home/robert/mmwave/presence.log", "a") as f:
+            f.write(f"{asctime()} %s\n" % event)
         if event in ("occupied-moving", "occupied-static", "unoccupied"):
             if event != self.current_state:
                 self.mqttc.publish(self.TOPIC, '{ "presence": "%s" }' % event)
